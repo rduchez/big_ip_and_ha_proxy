@@ -1,0 +1,8 @@
+---
+# tasks:
+
+- hosts: haproxy_lb
+  become: True
+  roles: 
+    - haproxy
+#    - keepalived

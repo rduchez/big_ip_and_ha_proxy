@@ -1,0 +1,1 @@
+ansible-playbook playbooks/operations.yml --ask-vault-pass -e @password.yml -e state="present"

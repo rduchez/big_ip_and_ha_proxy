@@ -1,0 +1,16 @@
+keepalived_instances:
+  VI_1:
+   state: MASTER
+   interface: eth0
+   virtual_router_id: 51
+   priority: 101
+   authentication_password: 1111
+   vips:
+     - '192.168.155.28'
+   track_scripts:
+     - chk_haproxy
+
+keepalived_scripts:
+  chk_haproxy:
+    check_script: "killall -0 haproxy"
+    interval: 2

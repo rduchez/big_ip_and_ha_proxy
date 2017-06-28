@@ -1,0 +1,7 @@
+---
+  - hosts: haproxy_lb
+    gather_facts: False
+    roles:
+      - haproxy
+      - keepalived
+...

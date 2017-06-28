@@ -4,22 +4,36 @@
 ############
 - include: bigip_node/add_node.yml 
   vars: 
-    - host: "10.0.2.167" 
+    - host: "192.168.155.180" 
     - name: "member1" 
+    - monitor: "/Common/icmp"
+  when: state == "present"
+
+- include: bigip_node/add_node.yml
+  vars:
+    - host: "192.168.155.181"
+    - name: "member2"
     - monitor: "/Common/icmp"
   when: state == "present"
 
 - include: bigip_pool/manage_pool.yml 
   vars: 
     - name: "pool1"
-    - monitor: "/Common/http_head_f5"
+    - monitor: "/Common/http"
   when: state == "present"
 
 - include: bigip_pool_member/manage_members.yml 
   vars: 
     - host: "member1" 
     - pool: "pool1"
-    - port: "8080"
+    - port: "80"
+  when: state == "present"
+
+- include: bigip_pool_member/manage_members.yml
+  vars:
+    - host: "member2"
+    - pool: "pool1"
+    - port: "80"
   when: state == "present"
 
 - include: bigip_irule/manage_irule.yml
@@ -34,7 +48,7 @@
 - include: bigip_virtual_server/manage_vip.yml 
   vars:
     - description: "foo-vip" 
-    - destination: "10.0.2.183" 
+    - destination: "192.168.155.90" 
     - name: "vip1" 
     - pool: "pool1" 
     - port: "80" 
@@ -43,11 +57,11 @@
     - all_rules: "Bodgeit_Rewrite"
   when: state == "present"
 
-- include: bigip_iapp_template/appsvcs.yml
-  when: state == "present"
+#- include: bigip_iapp_template/appsvcs.yml
+#  when: state == "present"
 
-- include: bigip_iapp_service/appsvcs.yml
-  when: state == "present"
+#- include: bigip_iapp_service/appsvcs.yml
+#  when: state == "present"
 
 ###############
 #Remove objects
@@ -55,7 +69,7 @@
 - include: bigip_virtual_server/manage_vip.yml
   vars:
     - description: "foo-vip" 
-    - destination: "10.0.2.183" 
+    - destination: "192.168.155.90" 
     - name: "vip1" 
     - pool: "pool1" 
     - port: "80" 
@@ -85,9 +99,15 @@
     - monitor: "/Common/icmp"
   when: state == "absent"
 
-- include: bigip_iapp_service/appsvcs.yml
+- include: bigip_node/remove_node.yml
+  vars:
+    - name: "member2"
+    - monitor: "/Common/icmp"
   when: state == "absent"
 
-- include: bigip_iapp_template/appsvcs.yml
-  when: state == "absent"
+#- include: bigip_iapp_service/appsvcs.yml
+#  when: state == "absent"
+
+#- include: bigip_iapp_template/appsvcs.yml
+#  when: state == "absent"
 ...

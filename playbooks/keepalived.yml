@@ -1,0 +1,13 @@
+---
+# tasks:
+
+- hosts: haproxy_master
+  become: True
+  roles: 
+    # - haproxy
+    - keepalived
+
+- hosts: haproxy_slave
+  become: True
+  roles:
+    - keepalived
